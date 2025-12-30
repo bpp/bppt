@@ -1,3 +1,5 @@
+<img src="images/bppt.png" alt="bppt" width="400">
+
 # BPPT - BPP Tree Viewer
 
 A web and desktop application for viewing MCMC trees from [BPP](https://github.com/bpp/bpp) (Bayesian Phylogenetics and Phylogeography) analysis.
