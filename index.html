@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPPT - Tree Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1 class="header-title">BPPT - Tree Viewer</h1>
+      <div class="header-controls">
+        <select id="view-select" class="view-select">
+          <option value="phylogram">Phylogram</option>
+          <option value="cladogram">Cladogram</option>
+        </select>
+        <label class="theta-toggle">
+          <input type="checkbox" id="show-theta" checked>
+          <span>Show θ</span>
+        </label>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="card">
+        <div class="file-bar">
+          <button id="choose-file" class="btn btn-primary">Choose File...</button>
+          <span id="filename" class="filename">No file selected</span>
+          <div id="gene-tree-controls" class="gene-tree-controls" style="display: none;">
+            <button id="choose-imap" class="btn btn-secondary">Imap...</button>
+            <span id="imap-filename" class="filename-small"></span>
+            <button id="choose-genetree" class="btn btn-secondary">Gene Trees...</button>
+            <span id="genetree-filename" class="filename-small"></span>
+            <div id="locus-selector" class="locus-selector" style="display: none;">
+              <label>Locus:</label>
+              <select id="locus-select" class="locus-select"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="dimension-controls">
+          <div class="dimension-control">
+            <label>Height:</label>
+            <input type="range" id="height-slider" class="dimension-slider" min="300" max="10000" value="500">
+            <span id="height-value" class="dimension-value">500px</span>
+          </div>
+          <div class="dimension-control">
+            <label>Width:</label>
+            <input type="range" id="width-slider" class="dimension-slider" min="400" max="5000" value="800">
+            <span id="width-value" class="dimension-value">800px</span>
+          </div>
+        </div>
+
+        <div class="canvas-container" id="canvas-container">
+          <canvas id="tree-canvas"></canvas>
+          <div id="no-tree-message" class="no-tree-message">
+            <p>No tree loaded</p>
+            <p class="hint">Click "Choose File..." to open a BPP MCMC output file</p>
+          </div>
+        </div>
+
+        <div class="navigation">
+          <button id="prev-btn" class="nav-btn" disabled>◀</button>
+          <input type="range" id="tree-slider" class="tree-slider" min="0" max="0" value="0" disabled>
+          <button id="next-btn" class="nav-btn" disabled>▶</button>
+        </div>
+
+        <div class="tree-info">
+          <span>Tree</span>
+          <input type="text" id="tree-input" class="tree-input" value="0" disabled>
+          <span id="tree-total">of 0</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <input type="file" id="file-input" accept=".txt,.mcmc.txt,.tre,.trees,.nwk,.newick" hidden>
+  <input type="file" id="genetree-input" accept=".txt,.gtree,.tre,.trees,.nwk,.newick" multiple hidden>
+  <input type="file" id="imap-input" accept=".txt,.imap" hidden>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

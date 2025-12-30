@@ -1,0 +1,437 @@
+/* BPPT - BPP Tree Viewer Styles
+   Matching the bpps project Nature/Bio theme */
+
+:root {
+  /* Backgrounds */
+  --bg-main: #f0f4f0;
+  --bg-card: #ffffff;
+  --bg-light: #f8faf8;
+  --bg-hover: #e8f5eb;
+
+  /* Text */
+  --text-primary: #1e3a29;
+  --text-secondary: #4a6352;
+  --text-muted: #6b8f7a;
+
+  /* Accent */
+  --accent: #4a7c59;
+  --accent-dark: #3d6b4a;
+  --accent-secondary: #6b8f7a;
+  --highlight: #e8b931;
+
+  /* Borders */
+  --border: #d4e5d8;
+  --border-light: #e8f0ea;
+
+  /* Tree colors */
+  --tree-branch: #4a7c59;
+  --tree-node: #6b8f7a;
+  --theta-label: #8e44ad;
+
+  /* Shadows */
+  --shadow-card: 0 4px 20px rgba(30, 58, 41, 0.1);
+  --shadow-btn: 0 2px 8px rgba(30, 58, 41, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-main);
+  min-height: 100vh;
+}
+
+.monospace {
+  font-family: 'Source Code Pro', monospace;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--bg-main);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-title {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.view-select {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.view-select:hover {
+  border-color: var(--accent);
+}
+
+.view-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.theta-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.theta-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+/* Main Content */
+.main-content {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Card */
+.card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+/* File Bar */
+.file-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  color: white;
+  box-shadow: var(--shadow-btn);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.25);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--bg-light);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+}
+
+.gene-tree-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.gene-tree-controls .btn {
+  padding: 6px 12px;
+  font-size: 0.85em;
+}
+
+.locus-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85em;
+  color: var(--text-secondary);
+}
+
+.locus-select {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.locus-select:hover {
+  border-color: var(--accent);
+}
+
+.filename {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  font-family: 'Source Code Pro', monospace;
+}
+
+.filename-small {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  font-family: 'Source Code Pro', monospace;
+}
+
+/* Canvas Container - fixed size with scrollable content */
+.canvas-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background: var(--bg-card);
+  overflow: auto;
+}
+
+#tree-canvas {
+  display: block;
+}
+
+/* Dimension controls (height and width) */
+.dimension-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 20px;
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.85em;
+  color: var(--text-secondary);
+}
+
+.dimension-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dimension-control label {
+  white-space: nowrap;
+}
+
+.dimension-slider {
+  width: 150px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+}
+
+.dimension-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.dimension-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.dimension-value {
+  font-family: 'Source Code Pro', monospace;
+  min-width: 55px;
+}
+
+.no-tree-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.no-tree-message p {
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.no-tree-message .hint {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+.no-tree-message.hidden {
+  display: none;
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-light);
+}
+
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tree-slider {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+}
+
+.tree-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: transform 0.15s;
+}
+
+.tree-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.tree-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+}
+
+.tree-slider:disabled {
+  opacity: 0.5;
+}
+
+/* Tree Info */
+.tree-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--bg-light);
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+.tree-input {
+  width: 80px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.9em;
+  text-align: right;
+}
+
+.tree-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.tree-input:disabled {
+  opacity: 0.5;
+}
+
+#tree-total {
+  font-family: 'Source Code Pro', monospace;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .main-content {
+    padding: 16px;
+  }
+
+  .canvas-container {
+    height: 400px;
+  }
+}
