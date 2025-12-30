@@ -1,14 +1,10 @@
 name: Build and Release Electron Apps
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version tag (e.g., v1.0.0)'
-        required: false
-        default: ''
 
 permissions:
   contents: write
@@ -112,10 +108,9 @@ jobs:
           path: dist-electron/*.dmg
           if-no-files-found: error
 
-  upload-release:
+  create-release:
     needs: [build-linux, build-windows, build-mac]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release'
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -125,9 +120,11 @@ jobs:
       - name: List downloaded artifacts
         run: find artifacts -type f -ls
 
-      - name: Upload to Release
+      - name: Create Release and Upload Assets
         uses: softprops/action-gh-release@v2
         with:
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
           files: |
             artifacts/linux-builds/*
             artifacts/windows-builds/*
