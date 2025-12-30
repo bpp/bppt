@@ -48,27 +48,24 @@ export class PhylogramRenderer extends TreeRenderer {
     const scaleDepth = this.fixedScale || getDepth(tree) || 1;
 
     // Calculate dimensions (swapped for vertical orientation)
-    // Reserve space on right for scale bar
-    const scaleBarWidth = 80;
-    const availableWidth = width - this.style.marginLeft - this.style.marginRight - scaleBarWidth;
+    // Use most of width for tree, small margin for scale bar
+    const scaleBarWidth = 50;
+    const marginLeft = 30;
+    const marginRight = 10;
+    const availableWidth = width - marginLeft - marginRight - scaleBarWidth;
+
     const availableHeight = height - this.style.marginTop - this.style.marginBottom;
 
-    // Ensure minimum spacing between tips (horizontal spacing now)
-    const tipSpacing = Math.max(
-      this.style.minTipSpacing,
-      availableWidth / Math.max(nLeaves - 1, 1)
-    );
-    const actualWidth = nLeaves > 1 ? tipSpacing * (nLeaves - 1) : 0;
+    // Use full available width for tree
+    const tipSpacing = nLeaves > 1 ? availableWidth / (nLeaves - 1) : 0;
+    const xOffset = marginLeft;
 
-    // Center horizontally if tree is smaller than canvas
-    let xOffset = this.style.marginLeft;
-    if (actualWidth < availableWidth) {
-      xOffset += (availableWidth - actualWidth) / 2;
-    }
-
-    // Y scale: root at bottom, tips at top (using fixed scale)
+    // Y scale: tips fixed at top, root moves down with height
     const yScale = availableHeight / scaleDepth;
-    const rootY = height - this.style.marginBottom;
+    const tipY = this.style.marginTop;
+    // Root position = tipY + (tree depth * scale)
+    const treeDepth = getDepth(tree) || scaleDepth;
+    const rootY = tipY + treeDepth * yScale;
 
     // Assign x positions to leaves
     const leafX: Map<string, number> = new Map();
@@ -79,8 +76,8 @@ export class PhylogramRenderer extends TreeRenderer {
     // Draw tree
     this.drawNode(tree, rootY, leafX, yScale);
 
-    // Draw scale bar
-    this.drawScaleBar(width, height, yScale, scaleDepth);
+    // Draw scale bar (positioned relative to root)
+    this.drawScaleBar(width, rootY, yScale, scaleDepth);
   }
 
   /**
@@ -88,16 +85,16 @@ export class PhylogramRenderer extends TreeRenderer {
    */
   private drawScaleBar(
     canvasWidth: number,
-    canvasHeight: number,
+    rootY: number,
     yScale: number,
     maxDepth: number
   ): void {
     const ctx = this.ctx;
     const style = this.style;
 
-    // Position scale bar on the right
-    const barX = canvasWidth - 60;
-    const barBottom = canvasHeight - style.marginBottom;
+    // Position scale bar on the right, aligned with root
+    const barX = canvasWidth - 30;
+    const barBottom = rootY;
 
     // Calculate a nice round number for the scale
     const niceScale = this.getNiceScaleValue(maxDepth);

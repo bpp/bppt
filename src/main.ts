@@ -106,8 +106,16 @@ class BPPTApp {
     this.canvasContainer = document.getElementById('canvas-container') as HTMLElement;
 
     this.setupEventListeners();
+    this.initializeDefaults();
     this.resizeCanvas();
     this.render();
+  }
+
+  private initializeDefaults(): void {
+    // Set default width to match container width so tree fills screen
+    const containerWidth = this.canvasContainer.getBoundingClientRect().width;
+    this.widthSlider.value = String(Math.floor(containerWidth));
+    this.widthValue.textContent = `${Math.floor(containerWidth)}px`;
   }
 
   private setupEventListeners(): void {
