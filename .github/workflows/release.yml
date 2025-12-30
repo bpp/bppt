@@ -42,9 +42,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-builds
-          path: |
-            dist-electron/*.AppImage
-            dist-electron/*.deb
+          path: dist-electron/*.AppImage
           if-no-files-found: error
 
   build-windows:

@@ -1,6 +1,6 @@
 {
   "name": "bppt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "BPP Tree Viewer - View MCMC trees from BPP phylogenetic analysis",
   "type": "module",
   "main": "out/main/index.js",
@@ -34,10 +34,10 @@
     "files": [
       "out/**/*"
     ],
+    "publish": null,
     "linux": {
       "target": [
-        { "target": "AppImage", "arch": ["x64"] },
-        { "target": "deb", "arch": ["x64"] }
+        { "target": "AppImage", "arch": ["x64"] }
       ],
       "category": "Science"
     },
