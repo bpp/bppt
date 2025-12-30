@@ -1,4 +1,4 @@
-<img src="images/bppt.png" alt="bppt" width="400">
+<img src="images/bppt.png" alt="bppt" width="700">
 
 # BPPT - BPP Tree Viewer
 
