@@ -676,12 +676,14 @@ export class EmbeddedGeneTreeRenderer extends TreeRenderer {
       ctx.stroke();
 
       // Draw individual label
-      const label = node.individual || node.name.split('^')[1] || node.name;
-      ctx.fillStyle = '#8B4513';
-      ctx.font = '10px "Source Code Pro", monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText(label, x, tipY - 4);
+      if (this.style.showLabels) {
+        const label = node.individual || node.name.split('^')[1] || node.name;
+        ctx.fillStyle = '#8B4513';
+        ctx.font = '10px "Source Code Pro", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(label, x, tipY - 4);
+      }
 
       const species = node.species || this.getSpeciesFromName(node.name);
       return { x, y: parentY, species: new Set([species]) };

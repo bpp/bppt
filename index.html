@@ -22,6 +22,10 @@
           <input type="checkbox" id="show-theta" checked>
           <span>Show θ</span>
         </label>
+        <label class="theta-toggle">
+          <input type="checkbox" id="show-labels" checked>
+          <span>Show Labels</span>
+        </label>
       </div>
     </header>
 
@@ -33,7 +37,7 @@
           <div id="gene-tree-controls" class="gene-tree-controls" style="display: none;">
             <button id="choose-imap" class="btn btn-secondary">Imap...</button>
             <span id="imap-filename" class="filename-small"></span>
-            <button id="choose-genetree" class="btn btn-secondary">Gene Trees...</button>
+            <button id="choose-genetree" class="btn btn-secondary" disabled title="Load an Imap file first">Gene Trees...</button>
             <span id="genetree-filename" class="filename-small"></span>
             <div id="locus-selector" class="locus-selector" style="display: none;">
               <label>Locus:</label>

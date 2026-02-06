@@ -10,7 +10,7 @@ import { PhylogramRenderer } from './renderer/phylogram';
 import { CladogramRenderer } from './renderer/cladogram';
 import { EmbeddedGeneTreeRenderer } from './renderer/embedded-genetree';
 import { TreeRenderer } from './renderer/tree-renderer';
-import { parseGeneTree, parseImap } from './core/genetree-parser';
+import { parseGeneTree, parseImap, validateGeneTreeCompatibility } from './core/genetree-parser';
 import { Imap } from './core/genetree-types';
 
 class BPPTApp {
@@ -44,6 +44,7 @@ class BPPTApp {
   private treeTotal: HTMLElement;
   private viewSelect: HTMLSelectElement;
   private showThetaCheckbox: HTMLInputElement;
+  private showLabelsCheckbox: HTMLInputElement;
 
   // Gene tree UI elements
   private geneTreeControls: HTMLElement;
@@ -86,6 +87,7 @@ class BPPTApp {
     this.treeTotal = document.getElementById('tree-total') as HTMLElement;
     this.viewSelect = document.getElementById('view-select') as HTMLSelectElement;
     this.showThetaCheckbox = document.getElementById('show-theta') as HTMLInputElement;
+    this.showLabelsCheckbox = document.getElementById('show-labels') as HTMLInputElement;
 
     // Gene tree UI elements
     this.geneTreeControls = document.getElementById('gene-tree-controls') as HTMLElement;
@@ -144,6 +146,7 @@ class BPPTApp {
     // View controls
     this.viewSelect.addEventListener('change', () => this.handleViewChange());
     this.showThetaCheckbox.addEventListener('change', () => this.handleThetaToggle());
+    this.showLabelsCheckbox.addEventListener('change', () => this.handleLabelsToggle());
 
     // Dimension sliders
     this.heightSlider.addEventListener('input', () => this.handleHeightChange());
@@ -431,6 +434,14 @@ class BPPTApp {
     this.render();
   }
 
+  private handleLabelsToggle(): void {
+    const showLabels = this.showLabelsCheckbox.checked;
+    for (const renderer of this.renderers.values()) {
+      renderer.setStyle({ showLabels });
+    }
+    this.render();
+  }
+
   private handleHeightChange(): void {
     const height = parseInt(this.heightSlider.value, 10);
     this.heightValue.textContent = `${height}px`;
@@ -450,6 +461,12 @@ class BPPTApp {
   private async handleGeneTreeSelect(): Promise<void> {
     const files = this.geneTreeInput.files;
     if (!files || files.length === 0) return;
+
+    // Guard: require imap to be loaded
+    if (this.imap.size === 0) {
+      alert('Please load an Imap file before loading gene trees.');
+      return;
+    }
 
     try {
       this.geneTreeFilenameSpan.textContent = 'Indexing...';
@@ -506,6 +523,34 @@ class BPPTApp {
       // Set fixed scale for current locus
       this.updateEmbeddedScale();
 
+      // Run compatibility check
+      if (this.indexer) {
+        this.geneTreeFilenameSpan.textContent = 'Checking compatibility...';
+        const incompatibilities = await validateGeneTreeCompatibility(
+          this.indexer,
+          this.geneTreeIndexers,
+          this.locusNames,
+          this.imap,
+          (checked, total) => {
+            this.geneTreeFilenameSpan.textContent = `Checking compatibility... ${checked}/${total}`;
+          }
+        );
+
+        if (incompatibilities.length > 0) {
+          // Build summary message
+          const maxDisplay = 10;
+          const lines = incompatibilities.slice(0, maxDisplay).map(e =>
+            `  Iteration ${e.iteration}, ${e.locus}: ${e.details[0]}`
+          );
+          let msg = `Found ${incompatibilities.length} gene tree / species tree incompatibilit${incompatibilities.length === 1 ? 'y' : 'ies'}:\n\n${lines.join('\n')}`;
+          if (incompatibilities.length > maxDisplay) {
+            msg += `\n  ... and ${incompatibilities.length - maxDisplay} more`;
+          }
+          msg += '\n\nGene trees loaded but some coalescent events are outside valid populations.';
+          alert(msg);
+        }
+      }
+
       this.geneTreeFilenameSpan.textContent = `(${this.locusNames.length} loci)`;
 
       // Add embedded option to view selector if not present
@@ -555,6 +600,10 @@ class BPPTApp {
       }
 
       this.imapFilenameSpan.textContent = `(${this.imap.size})`;
+
+      // Enable gene tree button now that imap is loaded
+      this.chooseGeneTreeBtn.disabled = false;
+      this.chooseGeneTreeBtn.title = '';
 
       // Update the embedded renderer with the imap
       await this.updateEmbeddedRenderer();

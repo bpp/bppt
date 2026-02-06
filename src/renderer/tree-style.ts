@@ -25,6 +25,7 @@ export interface TreeStyle {
 
   // Options
   showTheta: boolean;
+  showLabels: boolean;
 }
 
 /**
@@ -52,6 +53,7 @@ export function createDefaultStyle(): TreeStyle {
     minTipSpacing: 30,
 
     // Options
-    showTheta: true
+    showTheta: true,
+    showLabels: true
   };
 }
